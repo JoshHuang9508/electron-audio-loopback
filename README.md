@@ -51,7 +51,7 @@ audioElement.play();
 
 ### Renderer Process Functions
 
-- `getLoopbackAudioMediaStream()`: Returns a Promise that resolves to a MediaStream containing system audio loopback. Video tracks are automatically removed from the stream.
+- `getLoopbackAudioMediaStream()`: Returns a Promise that resolves to a `MediaStream` containing system audio loopback. Video tracks are automatically removed from the stream.
 
 ### IPC Handlers
 
