@@ -1,6 +1,6 @@
 # Electron Audio Loopback
 
-An Electron plugin for capturing system audio loopback on macOS 12.3+ and Windows 10+.
+An Electron plugin for capturing system audio loopback on macOS 12.3+ and Windows 10+, without any third-party loopback drivers or dependencies.
 
 ## Installation
 
