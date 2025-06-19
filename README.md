@@ -1,6 +1,6 @@
-# Electron Loopback Audio Plugin
+# Electron System Audio Loopback
 
-An Electron plugin for enabling system audio loopback capture via `navigator.mediaDevices.getDisplayMedia` on macOS 12.3+ and Windows 10+.
+An Electron plugin for capturing system audio loopback on macOS 12.3+ and Windows 10+.
 
 ## Installation
 
@@ -14,11 +14,11 @@ npm install electron-loopback-audio
 
 ```javascript
 const { app } = require('electron');
-const { setupMainProcess } = require('electron-loopback-audio');
+const { initMain } = require('electron-loopback-audio');
 
-// Setup the plugin in your main process
+// Initialize the plugin in your main process
 // before the app is ready
-setupMainProcess();
+initMain();
 
 app.whenReady().then(() => {
   // Your app initialization
@@ -28,45 +28,37 @@ app.whenReady().then(() => {
 ### Renderer Process Usage
 
 ```javascript
-const { enableLoopbackAudio } = require('electron-loopback-audio');
+const { getLoopbackAudioMediaStream } = require('electron-loopback-audio');
 
-const enabled = enableLoopbackAudio();
+// Get a MediaStream with system audio loopback
+const stream = await getLoopbackAudioMediaStream();
 
-if (!enabled) {
-  throw new Error('Failed to enable loopback audio');
-}
-
-const stream = await navigator.mediaDevices.getDisplayMedia({
-  video: false,
-  audio: true,
-});
-
-// The stream will now include system audio
+// The stream contains only audio tracks
 const audioTracks = stream.getAudioTracks();
-
 console.log('Audio tracks:', audioTracks);
 
-const disabled = disableLoopbackAudio();
-
-if (!disabled) {
-  throw new Error('Failed to disable loopback audio');
-}
+// Use the stream with an audio element or Web Audio API
+const audioElement = document.getElementById('audio');
+audioElement.srcObject = stream;
+audioElement.play();
 ```
 
 ## API Reference
 
 ### Main Process Functions
 
-- `setupMainProcess()`: Initialize the plugin in the main process
-- `enableLoopbackAudio()`: Enable system audio loopback capture in the renderer process
-- `disableLoopbackAudio()`: Disable system audio loopback capture in the renderer process
+- `initMain()`: Initialize the plugin in the main process. Must be called before the app is ready.
+
+### Renderer Process Functions
+
+- `getLoopbackAudioMediaStream()`: Returns a Promise that resolves to a MediaStream containing system audio loopback. Video tracks are automatically removed from the stream.
 
 ### IPC Handlers
 
 The plugin registers these IPC handlers automatically:
 
-- `enable-loopback-audio`: Enable loopback audio
-- `disable-loopback-audio`: Disable loopback audio
+- `enable-loopback-audio`: Enables system audio loopback capture
+- `disable-loopback-audio`: Disables system audio loopback capture
 
 ## Requirements
 
@@ -94,13 +86,18 @@ npm run dev
 
 # Lint code
 npm run lint
+
+# Run example
+npm test
 ```
 
 ### Project Structure
 
 ```
 src/
-└── index.ts          # Main entry point with Electron setup
+├── index.ts          # Main entry point with conditional exports
+├── main.ts           # Main process initialization
+└── renderer.ts       # Renderer process functionality
 ```
 
 ## License
