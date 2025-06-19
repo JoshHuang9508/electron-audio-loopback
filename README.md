@@ -1,6 +1,6 @@
 # Electron Audio Loopback
 
-An Electron plugin for capturing system audio loopback on macOS 12.3+ and Windows 10+, without any third-party loopback drivers or dependencies.
+An Electron plugin for capturing system audio loopback on macOS 12.3+, Windows 10+, and Linux without any third-party loopback drivers or dependencies.
 
 ## Installation
 
@@ -63,7 +63,7 @@ The plugin registers these IPC handlers automatically:
 ## Requirements
 
 - Electron >= 31.0.1
-- macOS 12.3+ or Windows 10+
+- macOS 12.3+, Windows 10+, most Linux distros
 
 ## Development
 
