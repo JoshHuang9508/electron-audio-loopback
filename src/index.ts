@@ -1,23 +1,9 @@
-import { app, session, desktopCapturer, ipcMain } from 'electron';
+const getLoopbackAudioStream = require('./renderer.js');
+const setupMainProcess = require('./main.js');
 
-export const setupMainProcess: () => void = () => {
-    app.commandLine.appendSwitch('enable-features', 'MacSckSystemAudioLoopbackOverride');
-    ipcMain.handle('enable-loopback-audio', enableLoopbackAudio);
-    ipcMain.handle('disable-loopback-audio', disableLoopbackAudio);
-};
-
-export const enableLoopbackAudio: () => void = () => {
-    app.whenReady().then(() => {
-        session.defaultSession.setDisplayMediaRequestHandler((_, callback) => {
-            desktopCapturer.getSources({ types: ['screen'] }).then((sources) => {
-                callback({ video: sources[0], audio: 'loopback' })
-            })
-        });
-    });
-}
-
-export const disableLoopbackAudio: () => void = () => {
-    app.whenReady().then(() => {
-        session.defaultSession.setDisplayMediaRequestHandler(null);
-    });
+// @ts-ignore
+if (process.type === 'renderer') {
+    module.exports.getLoopbackAudioStream = getLoopbackAudioStream;
+} else {
+    module.exports.setupMainProcess = setupMainProcess;
 }
