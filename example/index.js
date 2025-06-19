@@ -1,8 +1,8 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const { setupMainProcess } = require('../dist/index.js');
+const { initMain: initSystemAudioLoopback } = require('../dist/index.js');
 
-setupMainProcess();
+initSystemAudioLoopback();
 
 app.whenReady().then(() => {
     const mainWindow = new BrowserWindow({
@@ -15,7 +15,6 @@ app.whenReady().then(() => {
     });
 
     mainWindow.loadFile('index.html');
-
 
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.show();

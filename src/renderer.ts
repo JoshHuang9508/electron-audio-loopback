@@ -1,6 +1,6 @@
-const { ipcRenderer } = require('electron');
+import { ipcRenderer } from 'electron';
 
-module.exports = async (): Promise<MediaStream> => {
+export const getLoopbackAudioMediaStream = async (): Promise<MediaStream> => {
     await ipcRenderer.invoke('enable-loopback-audio');
 
     const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });

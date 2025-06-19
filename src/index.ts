@@ -1,9 +1,9 @@
-const getLoopbackAudioStream = require('./renderer.js');
-const setupMainProcess = require('./main.js');
+import { getLoopbackAudioMediaStream } from './renderer.js';
+import { initMain } from './main.js';
 
 // @ts-ignore
 if (process.type === 'renderer') {
-    module.exports.getLoopbackAudioStream = getLoopbackAudioStream;
+    module.exports.getLoopbackAudioMediaStream = getLoopbackAudioMediaStream;
 } else {
-    module.exports.setupMainProcess = setupMainProcess;
+    module.exports.initMain = initMain;
 }
