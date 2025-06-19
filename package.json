@@ -1,5 +1,5 @@
 {
-  "name": "electron-loopback-audio",
+  "name": "electron-audio-loopback",
   "version": "1.0.0",
   "description": "Capture system audio loopback on macOS 12.3+ and Windows 10+",
   "main": "dist/index.js",
@@ -40,6 +40,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/alectrocute/electron-loopback-audio"
+    "url": "git://github.com/alectrocute/electron-audio-loopback"
   }
 }

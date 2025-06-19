@@ -1,11 +1,11 @@
-# Electron System Audio Loopback
+# Electron Audio Loopback
 
 An Electron plugin for capturing system audio loopback on macOS 12.3+ and Windows 10+.
 
 ## Installation
 
 ```bash
-npm install electron-loopback-audio
+npm install electron-audio-loopback
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ npm install electron-loopback-audio
 
 ```javascript
 const { app } = require('electron');
-const { initMain } = require('electron-loopback-audio');
+const { initMain } = require('electron-audio-loopback');
 
 // Initialize the plugin in your main process
 // before the app is ready
@@ -28,7 +28,7 @@ app.whenReady().then(() => {
 ### Renderer Process Usage
 
 ```javascript
-const { getLoopbackAudioMediaStream } = require('electron-loopback-audio');
+const { getLoopbackAudioMediaStream } = require('electron-audio-loopback');
 
 // Get a MediaStream with system audio loopback
 const stream = await getLoopbackAudioMediaStream();
