@@ -1,7 +1,7 @@
 {
   "name": "electron-audio-loopback",
-  "version": "1.0.2",
-  "description": "Capture system audio loopback on macOS 12.3+ and Windows 10+",
+  "version": "1.0.3",
+  "description": "Capture system audio loopback on macOS 12.3+, Windows 10+ and Linux",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,7 +17,9 @@
     "electron",
     "audio",
     "system",
-    "plugin"
+    "plugin",
+    "loopback",
+    "capture"
   ],
   "author": "Alec Armbruster <alectrocute@gmail.com>",
   "license": "MIT",
