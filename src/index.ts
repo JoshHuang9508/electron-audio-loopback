@@ -1,7 +1,6 @@
 import { getLoopbackAudioMediaStream } from './renderer.js';
 import { initMain } from './main.js';
 
-// @ts-ignore
 if (process.type === 'renderer') {
     module.exports.getLoopbackAudioMediaStream = getLoopbackAudioMediaStream;
 } else {
