@@ -1,7 +1,27 @@
 <html>
-    <body>
-        <h1>Warning, this can blow your ears off!</h1>
-       <audio id="audio" autoplay controls></audio>
-       <p id="status"></p>
-    </body>
+
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f3f3f3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Example Audio Loopback App</h1>
+
+    <audio id="audio" autoplay controls></audio>
+
+    <p id="status">Obtaining audio stream...</p>
+
+    <canvas id="canvas"></canvas>
+</body>
+
 </html>

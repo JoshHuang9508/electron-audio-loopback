@@ -7,7 +7,8 @@ initSystemAudioLoopback();
 app.whenReady().then(() => {
     const mainWindow = new BrowserWindow({
         width: 800,
-        height: 600,
+        height: 400,
+        title: 'Example App',
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
