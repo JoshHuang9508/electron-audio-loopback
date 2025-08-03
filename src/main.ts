@@ -1,12 +1,15 @@
-import { app, session, desktopCapturer, ipcMain } from 'electron';
+import { app, session as sessionModule, desktopCapturer, ipcMain } from 'electron';
 import { type DesktopCapturerSource } from 'electron/main';
-import { buildFeatureFlags, ipcEvents, defaultSourcesOptions, featureSwitchKey } from './config.js';
+import { buildFeatureFlags, ipcEvents, defaultSourcesOptions, featureSwitchKey, loopbackAudioTypes } from './config.js';
 import { type InitMainOptions } from './types.js';
 
 export const initMain = (options: InitMainOptions = {}): void => {
     const {
-        sourcesOptions = defaultSourcesOptions,
         forceCoreAudioTap = false,
+        loopbackWithMute = false,
+        onAfterGetSources,
+        sessionOverride,
+        sourcesOptions = defaultSourcesOptions,
     } = options;
 
     // Get other enabled features from the command line.
@@ -27,11 +30,20 @@ export const initMain = (options: InitMainOptions = {}): void => {
 
     // Handle the enable loopback audio event.
     ipcMain.handle(ipcEvents.enableLoopbackAudio, () => {
-        session.defaultSession.setDisplayMediaRequestHandler(async (_, callback) => {
+        const session = sessionOverride || sessionModule.defaultSession;
+
+        session.setDisplayMediaRequestHandler(async (_, callback) => {
             let sources: DesktopCapturerSource[];
 
             try {
                 sources = await desktopCapturer.getSources(sourcesOptions);
+
+                // If the developer needs to transform the sources and return a single-item array,
+                // they can do so by passing a function to the `onAfterGetSources` option.
+                // Likely this will be unused, but who knows?!
+                if (onAfterGetSources) {
+                    sources = onAfterGetSources(sources);
+                }
             } catch {
                 throw new Error(`Failed to get sources for system audio loopback capture.`);
             }
@@ -40,12 +52,16 @@ export const initMain = (options: InitMainOptions = {}): void => {
                 throw new Error(`No sources found for system audio loopback capture.`);
             }
 
-            callback({ video: sources[0], audio: 'loopback' });
+            callback({
+                video: sources[0],
+                audio: loopbackWithMute ? loopbackAudioTypes.loopbackWithMute : loopbackAudioTypes.loopback,
+            });
         });
     });
 
     // Handle the disable loopback audio event.
     ipcMain.handle(ipcEvents.disableLoopbackAudio, () => {
-        session.defaultSession.setDisplayMediaRequestHandler(null);
+        const session = sessionOverride || sessionModule.defaultSession;
+        session.setDisplayMediaRequestHandler(null);
     });
 }

@@ -9,6 +9,11 @@ export const defaultSourcesOptions: SourcesOptions = { types: ['screen'] };
 
 export const featureSwitchKey = 'enable-features' as const;
 
+export const loopbackAudioTypes = {
+    loopback: 'loopback',
+    loopbackWithMute: 'loopbackWithMute',
+} as const;
+
 const defaultFeatureFlags = {
     pulseaudioLoopbackForScreenShare: 'PulseaudioLoopbackForScreenShare',
     macLoopbackAudioForScreenShare: 'MacLoopbackAudioForScreenShare',

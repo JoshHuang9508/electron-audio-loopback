@@ -2,11 +2,11 @@
 
 An Electron plugin for capturing system audio loopback on macOS 12.3+, Windows 10+ and Linux without any third-party loopback drivers or dependencies.
 
-To play around with a full example, check out the [mic-speaker-streamer](https://github.com/alectrocute/mic-speaker-streamer) repo. It's a simple app that allows you to simultaneously stream your microphone and system audio to a third-party transcription API while also recording both streams into a WAV file.
+To play around with a full example, check out the [mic-speaker-streamer](https://github.com/alectrocute/mic-speaker-streamer) repo. It's a simple app that allows you to simultaneously stream your microphone and system audio to a third-party transcription API while also recording both streams into a WAV file. Alternatively, check out the [bundled example in this repo](https://github.com/alectrocute/electron-audio-loopback/tree/main/example).
 
 ## Real-World Usage
 
-If your app is using Electron Audio Loopback, [make a PR](https://github.com/alectrocute/electron-audio-loopback/pulls) to add it to the list below!
+If your app is using Electron Audio Loopback, [make a PR](https://github.com/alectrocute/electron-audio-loopback/pulls) to add it to the list below! Both open and closed source apps are welcome.
 
 - [mic-speaker-streamer](https://github.com/alectrocute/mic-speaker-streamer): An example microphone/system audio transcription app using OpenAI's Realtime API.
 
@@ -35,29 +35,7 @@ app.whenReady().then(() => {
 
 ### Renderer Process Usage
 
-#### Automatic Mode
-
-If `nodeIntegration` is enabled in your renderer process, then you can import the renderer helper function directly. This will take care of everything for you in one line of code.
-
-```javascript
-const { getLoopbackAudioMediaStream } = require('electron-audio-loopback');
-
-// Get a MediaStream with system audio loopback
-const stream = await getLoopbackAudioMediaStream();
-
-// The stream contains only audio tracks
-const audioTracks = stream.getAudioTracks();
-console.log('Audio tracks:', audioTracks);
-
-// Use the stream with an audio element or Web Audio API
-const audioElement = document.getElementById('audio');
-audioElement.srcObject = stream;
-audioElement.play();
-```
-
-If you don't want to remove the video tracks, you can pass `removeVideo: false` to the `getLoopbackAudioMediaStream` function.
-
-#### Manual Mode
+#### Manual Mode (Recommended)
 
 If you do not have `nodeIntegration` enabled in your renderer process, then you'll need to manually initialize the plugin via IPC. See the example below:
 
@@ -94,6 +72,8 @@ async function getLoopbackAudioMediaStream() {
 
     // Tell the main process to disable system audio loopback.
     // This will restore full `getDisplayMedia` functionality.
+    // Do this if you need to use `getDisplayMedia` for other
+    // purposes elsewhere in your app.
     await window.electronAPI.disableLoopbackAudio();
     
     // Boom! You've got a MediaStream with system audio loopback.
@@ -102,6 +82,28 @@ async function getLoopbackAudioMediaStream() {
 }
 ```
 
+#### Automatic Mode
+
+If `nodeIntegration` is enabled in your renderer process, then you can import the renderer helper function directly. This will take care of everything for you in one line of code.
+
+```javascript
+const { getLoopbackAudioMediaStream } = require('electron-audio-loopback');
+
+// Get a MediaStream with system audio loopback
+const stream = await getLoopbackAudioMediaStream();
+
+// The stream contains only audio tracks
+const audioTracks = stream.getAudioTracks();
+console.log('Audio tracks:', audioTracks);
+
+// Use the stream with an audio element or Web Audio API
+const audioElement = document.getElementById('audio');
+audioElement.srcObject = stream;
+audioElement.play();
+```
+
+If you don't want to remove the video tracks, you can pass `removeVideo: false` to the `getLoopbackAudioMediaStream` function.
+
 ## API Reference
 
 ### Main Process Functions
@@ -109,6 +111,9 @@ async function getLoopbackAudioMediaStream() {
 - `initMain(options?: InitMainOptions)`: Initialize the plugin in the main process. Must be called before the app is ready.
   - `sourcesOptions`: The options to pass to the `desktopCapturer.getSources` method.
   - `forceCoreAudioTap`: Whether to force the use of the Core Audio API on macOS (can be used to bypass bugs for certain macOS versions).
+  - `loopbackWithMute`: Whether to use the loopback audio with mute. Defaults to `false`.
+  - `sessionOverride`: The session to override. Defaults to `session.defaultSession`.
+  - `onAfterGetSources`: A function that is called after the sources are retrieved. Useful for advanced & unique scenarios. Defaults to `undefined`.
 
 ### Renderer Process Functions
 
@@ -124,10 +129,10 @@ The plugin registers these IPC handlers automatically, ensure you don't override
 
 ## Requirements
 
-- Electron >= 31.0.1
+- Electron >= 31.0.1 (this is cruicial, older Electron versions will not work!)
 - macOS 12.3+
 - Windows 10+
-- Most Linux distros
+- Most Linux distros with PulseAudio as a sound server
 
 ## Development
 

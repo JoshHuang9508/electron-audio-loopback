@@ -1,6 +1,6 @@
 {
   "name": "electron-audio-loopback",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Capture system audio loopback on macOS 12.3+, Windows 10+ and Linux",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

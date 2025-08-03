@@ -9,6 +9,8 @@ export const getLoopbackAudioMediaStream = async (options: GetLoopbackAudioMedia
 
     const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
 
+    // As of August 2025, the Chromium team is not confident that
+    // the included video is stable enough for production use.
     if (removeVideo) {
         const videoTracks = stream.getVideoTracks();
 
