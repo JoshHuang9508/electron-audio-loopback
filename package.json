@@ -1,6 +1,6 @@
 {
-  "name": "electron-audio-loopback",
-  "version": "1.0.6",
+  "name": "electron-audio-loopback-josh",
+  "version": "1.0.7",
   "description": "Capture system audio loopback on macOS 12.3+, Windows 10+ and Linux",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,8 @@
     "prepublishOnly": "npm run clean && npm run build",
     "test": "npm run build && electron example/index.js",
     "lint": "eslint src --ext .ts",
-    "lint:fix": "eslint src --ext .ts --fix"
+    "lint:fix": "eslint src --ext .ts --fix",
+    "postbuild": "copy src\\types.d.ts dist\\types.d.ts"
   },
   "keywords": [
     "electron",
